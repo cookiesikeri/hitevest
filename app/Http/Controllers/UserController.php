@@ -89,7 +89,11 @@ class UserController extends Controller
 
             $this->sendOTP($user);
 
-            return $user;
+            return response()->json([
+                'message' => 'An OTP has been sent to your Email Address',
+                'Data' => $user,
+                'status' => true
+            ], 201);
 
         } catch (\Exception $e) {
             //return error message
@@ -219,7 +223,8 @@ class UserController extends Controller
                          ],
                          'referral_link'=>$referralCode->referral_link,
                          'account_number'=>$user->wallet->account_numbers,
-                         'walletBalance' => $user->wallet->balance,
+                         'deposit Wallet'   =>   $user->wallet->deposit_Wallet,
+                         'interest wallet'   =>   $user->wallet->interest_wallet,
                          'data'           => $this->respondWithToken($token)
                      ], 201);
                  } else {
@@ -320,8 +325,9 @@ class UserController extends Controller
                     'shutdown_level' => $user->shutdown_level = 0? 'NO' : 'YES',
                 ],
 
-                'referral_link'=> $user->referral_code->referral_link,
-                'walletBalance'   =>   $user->wallet->balance,
+                'referral link'=> $user->referral_code->referral_link,
+                'deposit Wallet'   =>   $user->wallet->deposit_Wallet,
+                'interest wallet'   =>   $user->wallet->interest_wallet,
                 'access_token' => $token,
                 "expires" => auth()->factory()->getTTL() * 60 * 2,
             ]);

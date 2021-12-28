@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Apis;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\DepositPlan;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
@@ -120,7 +121,7 @@ class UtilityController extends Controller
         }
     }
 
-    public function GetPlans()
+    public function InvestmentPlans()
     {
         try {
             $data = \App\Models\Plan::all();
@@ -130,6 +131,25 @@ class UtilityController extends Controller
         }
     }
 
+    public function DepositPlans()
+    {
+        try {
+            $data = DepositPlan::all();
+            return response()->json(['data' => $data],200);
+        } catch(\Exception $e) {
+            return response()->json(['message' => $e->getMessage()],500);
+        }
+    }
+
+    public function PaymentOption()
+    {
+        try {
+            $data = \App\Models\PaymentOption::all();
+            return response()->json(['data' => $data],200);
+        } catch(\Exception $e) {
+            return response()->json(['message' => $e->getMessage()],500);
+        }
+    }
 
 
 

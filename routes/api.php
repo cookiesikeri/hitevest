@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Apis\UtilityController;
 
@@ -54,7 +55,9 @@ Route::post('resend-otp', [UserController::class, 'resendOtp']);
         Route::get('idcards', [UtilityController::class, 'IDcard']);
         Route::get('cities', [UtilityController::class, 'Cities']);
         Route::get('security-questions', [UtilityController::class, 'SecretQuestions']);
-        Route::get('plans', [UtilityController::class, 'GetPlans']);
+        Route::get('investment-plans', [UtilityController::class, 'InvestmentPlans']);
+        Route::get('deposit-plans', [UtilityController::class, 'DepositPlans']);
+        Route::get('payment-options', [UtilityController::class, 'PaymentOption']);
 
 
     });
@@ -70,9 +73,20 @@ Route::post('resend-otp', [UserController::class, 'resendOtp']);
         Route::post('users/{user}', [UserController::class, 'updateProfile']);
         Route::post('change-password', [UserController::class, 'change_password']);
 
-
-
         Route::post('issue-support', [ApisUserController::class, 'IssueSupport']);
+
+
+    });
+
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+
+        Route::post('user-invest', [HomeController::class, 'UserInvest']);
+        Route::post('user-deposit', [HomeController::class, 'UserDeposit']);
+        Route::post('withdraw-money', [HomeController::class, 'WithdrawMoney']);
+        Route::post('transer-wallet', [HomeController::class, 'TransferWallet']);
+        Route::get('referrals/{user_id}', [HomeController::class, 'getReferrals']);
+
+
 
     });
 

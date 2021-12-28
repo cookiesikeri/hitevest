@@ -112,4 +112,17 @@ class User extends Authenticatable implements JWTSubject, Searchable
         return $this->hasMany(Transaction::class);
     }
 
+    public function user_investments() {
+        return $this->hasMany(UserInvestment::class);
+    }
+
+    public function user_deposits() {
+        return $this->hasMany(UserDeposit::class);
+    }
+
+    public function transferTransaction(){
+
+        return $this->hasMany('App\TransferTransaction');
+    }
+
 }
