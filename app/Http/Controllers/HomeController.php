@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Rules\MatchOldPassword;
 use App\Enums\AccountRequestAction;
 use App\Enums\AccountRequestType;
 use App\Enums\ActivityType;
@@ -94,7 +95,7 @@ class HomeController extends Controller
 
         ]);
 
-        return response()->json(['data' => $data, 'message' => 'Payment successful'],201);
+        return response()->json(['data' => $data, 'message' => 'Payment_successful'],201);
 
     }catch(ModelNotFoundException $me){
         return response()->json(['message'=>'User not found.'], 404);
@@ -162,7 +163,7 @@ class HomeController extends Controller
                 $wallet->save();
 
                 // $user->request_moneys()->save($order);
-                return response()->json(['message' => 'Withdrawer Request Successful', 'status' => true],200);
+                return response()->json(['message' => 'Withdrawer_Request_Successful', 'status' => true],200);
 
                 return redirect()->back();
 
@@ -178,7 +179,7 @@ class HomeController extends Controller
 
                 $wallet->walletTransaction()->save($wallet_transaction);
                 $wallet->save();
-                return response()->json(['message' => 'Withdrawer Request Failed! Wallet Balance Low', 'status' => false],419);
+                return response()->json(['message' => 'Withdrawer_Request_Failed!_Wallet_Balance_Low', 'status' => false],419);
 
             }
         }catch(Exception $e){
@@ -202,7 +203,7 @@ class HomeController extends Controller
                     }
                 }
 
-                return response()->json(['message'=>'Referees Retrieved Successfully', 'referrals'=>$accounts,], 200);
+                return response()->json(['message'=>'Referees_Retrieved_Successfully', 'referrals'=>$accounts,], 200);
             }catch(ModelNotFoundException $me){
                 return response()->json(['message'=>'User not found.'], 404);
             }catch(Exception $e){
@@ -225,7 +226,7 @@ class HomeController extends Controller
 
             if ($request->amount <= 1000) {
 
-                return response()->json(['message'=>'Amount to transfer CANNOT be less than 1000.'], 419);
+                return response()->json(['message'=>'Amount_to_transfer_CANNOT_be_less_than_1000.'], 419);
             }
 
             // $id = Session::get('user');
@@ -236,14 +237,14 @@ class HomeController extends Controller
             if ($receiver) {
                 if ($this->update_wallet($sender->wallet->id, $receiver->wallet->id, $request->amount)) {
 
-                    return response()->json(['message'=>'Transfer sent successfully.', 'status' => true], 200);
+                    return response()->json(['message'=>'Transfer_sent_successfully.', 'status' => true], 200);
 
                 } else {
-                        return response()->json(['message'=>'Insufficient Wallet Balance.', 'status' => false], 413);
+                        return response()->json(['message'=>'Insufficient_Wallet_Balance.', 'status' => false], 413);
                 }
             } else {
 
-                return response()->json(['message'=>'Receiver not found on this platform.', 'status' => false], 404);
+                return response()->json(['message'=>'Receiver_not_found_on_this_platform.', 'status' => false], 404);
 
             }
 
@@ -286,6 +287,19 @@ class HomeController extends Controller
 
         public function fetch_customer($id) {
             return User::where('id',$id)->with(['wallet'])->first();
+        }
+
+        public function storePassword(Request $request)
+        {
+            $request->validate([
+                'current_password' => ['required', new MatchOldPassword],
+                'new_password' => ['required'],
+                'new_confirm_password' => ['same:new_password'],
+            ]);
+
+            User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
+
+            dd('Password change successfully.');
         }
 
     }

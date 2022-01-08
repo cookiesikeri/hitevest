@@ -90,7 +90,7 @@ class UserController extends Controller
             $this->sendOTP($user);
 
             return response()->json([
-                'message' => 'An OTP has been sent to your Email Address',
+                'message' => 'An_OTP_has_been_sent_to_your_Email_Address',
                 'Data' => $user,
                 'status' => true
             ], 201);
@@ -100,7 +100,7 @@ class UserController extends Controller
 
             return response()->json([
                 'errors'  => $e->getMessage(),
-                'message' => 'User Registration Failed!',
+                'message' => 'User_Registration_Failed!',
             ], 409);
 
         }
@@ -119,7 +119,7 @@ class UserController extends Controller
                 $this->sendOtp($user);
             }
         }catch(ModelNotFoundException $me){
-            return response()->json(['message'=>'User not found.'], 404);
+            return response()->json(['message'=>'User_not_found.'], 404);
         }catch(Exception $e){
             return response()->json(['message'=>$e->getMessage()], 422);
         }
@@ -136,7 +136,7 @@ class UserController extends Controller
 
         Mail::to($user->email)->send(new OtpMail($user->name, $otp));
 
-        return "OTP successfully generated";
+        return response()->json(['message'=>'OTP_successfully_generated.'], 200);
     }
 
     public function verifyOtp(Request $request)
@@ -156,11 +156,11 @@ class UserController extends Controller
             ])->first();
             if(!empty($verifyOtp)){
                 if(Carbon::now() >= $verifyOtp->expires_at){
-                    return response()->json(['errors' => 'OTP is no longer valid'],403);
+                    return response()->json(['errors' => 'OTP_is_no_longer_valid'],403);
                 }
                 return $this->registerUsers($userId);
             } else {
-                return response()->json(['errors' => 'OTP does not exist'],404);
+                return response()->json(['errors' => 'OTP_does_not_exist'],404);
             }
         }
     }
@@ -204,7 +204,7 @@ class UserController extends Controller
                          'user_id' => $user->id
                      ]);
                      if (!$token = Auth::attempt($credentials)) {
-                         return response()->json(['message' => 'Unable to create token, kindly login'], 401);
+                         return response()->json(['message' => 'Unable_to_create_token_kindly_login'], 401);
                      }
                      Mail::to($inviteeUser->email)
                          ->send(new OnboardingMail($inviteeUser));
@@ -215,7 +215,7 @@ class UserController extends Controller
 
                      return response()->json([
                          'status'  => 201,
-                         'message' => 'Account created Successfully',
+                         'message' => 'Account_created_Successfully',
                          'user'    => [
                              'id'           => $user->id,
                              "name"         => $user->name,
@@ -229,7 +229,7 @@ class UserController extends Controller
                      ], 201);
                  } else {
                      return response()->json([
-                         'message' => 'Identity could not be verified.',
+                         'message' => 'Identity_could_not_be_verified.',
                      ], 403);
                  }
 
@@ -239,7 +239,7 @@ class UserController extends Controller
 
             return response()->json([
                 'errors'  => $e->getMessage(),
-                'message' => 'User Registration Failed!',
+                'message' => 'User_Registration_Failed!',
             ], 409);
 
         }
@@ -277,7 +277,7 @@ class UserController extends Controller
             if (!$token = Auth::attempt($credentials)) {
                 return response()->json([
                     'status'    =>  -1,
-                    'message'   => 'Invalid credentials'
+                    'message'   => 'Invalid_credentials'
                 ], 401);
             }
 
@@ -310,7 +310,7 @@ class UserController extends Controller
 
             return response()->json([
                 'status'   =>   200,
-                'message'  =>   'Successful',
+                'message'  =>   'Login Successful',
                 'user'     =>   [
                     'id'            => $user->id,
                     "name"    => $user->name,
@@ -343,7 +343,7 @@ class UserController extends Controller
         try {
         $users = User::orderBy('id', 'desc')->get();
         return response()->json([
-        "message" => "All Users retrieved succesfully",
+        "message" => "All_Users_retrieved_succesfully",
         'users' => $users,
         'status' => 'success',
     ], 200);
@@ -358,7 +358,7 @@ class UserController extends Controller
         if(!$userid)
         {
             return response()->json([
-                "message" => "No record found",
+                "message" => "No_record_found",
                 'status' => 'false',
             ], 404);
         }else
@@ -366,7 +366,7 @@ class UserController extends Controller
         return response()->json([
             'user' => $userid,
             'status' => 'success',
-            "message" => "User retreived succesfully",
+            "message" => "User_retreived_succesfully",
             'status' => 'success',
         ], 200);
     }
@@ -386,7 +386,7 @@ class UserController extends Controller
     public function logout()
     {
         auth()->logout();
-        return response()->json(['message' => 'Successfully logged out'], 200);
+        return response()->json(['message' => 'Successfully_logged_out'], 200);
     }
 
     /**
@@ -477,7 +477,7 @@ class UserController extends Controller
 
             return response()->json([
                 'status'   =>   1 ,
-                'message'  =>   'Account updated succesfully',
+                'message'  =>   'Account_updated_succesfully',
                 'user'     =>   [
                     'id'            => $user->id,
                     "name"    => $user->name,
@@ -499,7 +499,7 @@ class UserController extends Controller
                 //"expires" => auth()->factory()->getTTL() * 60 * 2,
             ]);
         }
-        return response()->json(['message' => 'you are not the owner of this account'], 419);
+        return response()->json(['message' => 'you_are_not_the_owner_of_this_account'], 419);
     }
 
 
@@ -528,7 +528,7 @@ class UserController extends Controller
         }
     }
 
-    public function change_password(Request $request){
+    public function changePassword(Request $request){
         try{
 
             $validator = Validator::make($request->all(), [
@@ -549,12 +549,12 @@ class UserController extends Controller
                 $User->password = bcrypt($request->password);
                 $User->save();
 
-                return response()->json(['message'=>'Password updated successfully.'], 201);
+                return response()->json(['message'=>'Password_updated_successfully.'], 201);
 
             } else {
 
 
-                return response()->json(['message'=>'An error occured while changing Password.'], 500);
+                return response()->json(['message'=>'An_error_occured_while_changing_Password.'], 500);
 
             }
 
@@ -563,6 +563,36 @@ class UserController extends Controller
             }
 
     }
+
+
+    public function DeleteUser($id){
+        $delete =  User::find($id);
+        if(!$delete)
+        {
+            return response()->json([
+                "message" => "No_record_found",
+                'status' => 'false',
+            ], 404);
+        }
+        $delete->delete();
+        return response()->json([
+            "message" => "User_deleted_succesfully",
+            'status' => 'success',
+        ], 201);
+    }
+
+    public function AllUser()
+    {
+        try {
+            $data = \App\Models\User::all();
+            return response()->json(['data' => $data],200);
+        } catch(\Exception $e) {
+            return response()->json(['message' => $e->getMessage()],500);
+        }
+    }
+
+
+
 
 
 }

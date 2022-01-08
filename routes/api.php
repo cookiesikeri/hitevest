@@ -41,6 +41,14 @@ Route::post('send-otp', [UserController::class, 'sendOTP']);
 Route::post('verify-otp', [UserController::class, 'verifyOtp']);
 Route::post('resend-otp', [UserController::class, 'resendOtp']);
 
+Route::post('change-password', [HomeController::class, 'changePassword']);
+
+
+
+Route::post('delete-user/{id}', [UserController::class, 'DeleteUser']);
+
+Route::get('all-users', [UserController::class, 'AllUser']);
+
 
 
     Route::post('login', [UserController::class, 'login']);
@@ -71,7 +79,7 @@ Route::post('resend-otp', [UserController::class, 'resendOtp']);
         Route::post('logout', [UserController::class, 'logout']);
         Route::post('set-secret-question', [UserController::class, 'setSecretQandA']);
         Route::post('users/{user}', [UserController::class, 'updateProfile']);
-        Route::post('change-password', [UserController::class, 'change_password']);
+
 
         Route::post('issue-support', [ApisUserController::class, 'IssueSupport']);
 
